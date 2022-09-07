@@ -22,6 +22,7 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request)
     {
+//        return $request->all();
         $request->validate([
             'name' => ['required', 'string', 'max:40'],
             'phone_no' => ['required', 'phone:BD', 'max:14', 'unique:users'],
@@ -38,6 +39,9 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return response()->noContent();
+        $token = $request->user()->createToken("auth_token")->plainTextToken;
+        return response()->json([
+            "access_token"=>$token
+        ],200);
     }
 }
