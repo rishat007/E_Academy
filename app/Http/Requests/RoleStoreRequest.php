@@ -3,8 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class StudentClassRequest extends FormRequest
+class RoleStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +14,6 @@ class StudentClassRequest extends FormRequest
      */
     public function authorize()
     {
-
         return $this->user()->can("Create Student Class");
     }
 
@@ -25,9 +25,16 @@ class StudentClassRequest extends FormRequest
     public function rules()
     {
         return [
-            //
-            'name'=>'required',
-            "status"=>"required",
+            'name' => ['required', 'string', Rule::unique('roles', 'name')],
+            'permissions' => ['required', 'array'],
+            "pemissions.*" => ['string'],
+            "guard_name" => ['required', 'string'],
         ];
+    }
+
+    public function prepareforvalidation(){
+        $this->merge([
+            'guard_name' => 'web',
+        ]);
     }
 }

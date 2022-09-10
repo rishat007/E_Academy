@@ -39,12 +39,12 @@ class StudentClassController extends Controller
     {
         //
 
-        $s_class = new StudentClass();
+        $studentClass = new StudentClass();
 
-        $s_class->name=$request->name;
-        $s_class->status=$request->status;
+        $studentClass->name=$request->name;
+        $studentClass->status=$request->status;
 
-        $s_class->save();
+        $studentClass->save();
 
         return response()->noContent();
     }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateModule extends Migration
+class AddUuidToRoleTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class CreateModule extends Migration
      */
     public function up()
     {
-        Schema::create('modules', function (Blueprint $table) {
-            $table->engine ='InnoDB';
-            $table->id();
-            $table->string('name')->unique();
-            $table->boolean('status');
-            $table->timestamps();
+        Schema::table('roles', function (Blueprint $table) {
+            //
+            $table->efficientUuid('uuid')->index()->after('id');
+
         });
     }
 
@@ -29,6 +27,10 @@ class CreateModule extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists("modules");
+        Schema::table('roles', function (Blueprint $table) {
+            //
+            $table->dropColumn('uuid');
+
+        });
     }
 }
