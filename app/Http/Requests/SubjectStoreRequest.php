@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StudentClassRequest extends FormRequest
+class SubjectStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,6 @@ class StudentClassRequest extends FormRequest
      */
     public function authorize()
     {
-
         return $this->user()->can("Create Student Class");
     }
 
@@ -26,8 +25,8 @@ class StudentClassRequest extends FormRequest
     {
         return [
             //
-            'name'=>'required',
-            "status"=>"required",
+            'name'=>['required','string', 'unique:subject'],
+            "status"=>["required",]
         ];
     }
 }

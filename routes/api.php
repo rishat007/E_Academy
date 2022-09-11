@@ -20,6 +20,8 @@ Route::group(["middleware" => ["auth:sanctum"]], function(){
     Route::post("student_class",[StudentClassController::class,"store"]);
     Route::get("permission_list", PermissionListController::class);
     Route::apiResource("role", RoleController::class);
+    Route::apiResource("student_classes", StudentClassController::class);
+
 });
 
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {

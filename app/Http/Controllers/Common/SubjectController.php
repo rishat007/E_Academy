@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Common;
 
 use App\Http\Controllers\Controller;
+use App\Models\Subject;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SubjectController extends Controller
 {
@@ -36,6 +38,20 @@ class SubjectController extends Controller
     public function store(Request $request)
     {
         //
+        try {
+            DB::beginTransaction();
+            $subject = new Subject();
+
+            $subject->name=$request->name;
+            $subject->status=$request->status;
+
+            $subject->save();
+            DB::commit();
+            return response()->noContent();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
     }
 
     /**
