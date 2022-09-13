@@ -50,21 +50,21 @@ class StudentClassController extends Controller
     public function store(StudentClassStoreRequest $request)
     {
         //
-    try {
-        DB::beginTransaction();
-        $studentClass = new StudentClass();
+        try {
+            DB::beginTransaction();
+            $studentClass = new StudentClass();
 
-        $studentClass->name=$request->name;
-        $studentClass->status=$request->status;
+            $studentClass->name=$request->name;
+            $studentClass->status=$request->status;
 
-        $studentClass->save();
-        Cache::forget('student_classes');
-        DB::commit();
-        return response()->noContent();
-    } catch (\Throwable $th) {
-        DB::rollBack();
-        throw $th;
-    }
+            $studentClass->save();
+            Cache::forget('student_classes');
+            DB::commit();
+            return response()->noContent();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
 
     }
 

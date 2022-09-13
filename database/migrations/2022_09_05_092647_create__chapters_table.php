@@ -19,7 +19,6 @@ class CreateChaptersTable extends Migration
             $table->id();
             $table->string('name', 30);
             $table->boolean('status')->nullable();
-            $table->foreignId('subjects_id')->index()->constrained();
             $table->timestamps();
 
         });

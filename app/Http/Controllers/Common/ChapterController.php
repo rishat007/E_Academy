@@ -3,7 +3,14 @@
 namespace App\Http\Controllers\Common;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ChapterStoreRequest;
+use App\Http\Requests\ChapterUpdateRequest;
+use App\Http\Resources\ChapterResource;
+use App\Models\Chapter;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Cache as FacadesCache;
+use Illuminate\Support\Facades\DB;
 
 class ChapterController extends Controller
 {
@@ -15,6 +22,10 @@ class ChapterController extends Controller
     public function index()
     {
         //
+        return Cache::rememberForever('chapters', function () {
+            $chapters = Chapter::with('subject')->get();
+           return ChapterResource::collection($chapters);
+        });
     }
 
     /**
@@ -33,9 +44,18 @@ class ChapterController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ChapterStoreRequest $request)
     {
         //
+        try {
+            DB::beginTransaction();
+            Chapter::create($request->safe()->all());
+            DB::commit();
+            return response()->noContent();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
     }
 
     /**
@@ -67,9 +87,19 @@ class ChapterController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ChapterUpdateRequest $request, Chapter  $chapter)
     {
         //
+        try {
+            DB::beginTransaction();
+            $chapter->update($request->safe()->all());
+            FacadesCache::forget('subject');
+            DB::commit();
+            return response()->noContent();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
     }
 
     /**
@@ -78,8 +108,18 @@ class ChapterController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Chapter $chapter)
     {
         //
+        try {
+            DB::beginTransaction();
+            $chapter->delete();
+            Cache::forget('subject');
+            DB::commit();
+            return response()->noContent();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
     }
 }
