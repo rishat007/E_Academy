@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class ChapterUpdateRequest extends FormRequest
+class UserUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -14,7 +14,7 @@ class ChapterUpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->can("Update Chapter");
+        return true;
     }
 
     /**
@@ -25,14 +25,12 @@ class ChapterUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => [
+            'name'=>'required',
+            'phone_no' => [
                 'required',
-                'string',
-                // Rule::unique('chapters', 'name')
-                // ->ignore($this->route()->student_classes)
+                Rule::unique('users', 'phone_no')
+                ->ignore($this->route()->user)
             ],
-            "status" => ["required", 'boolean'],
-            "subjects_id" => ['required', 'integer'],
         ];
     }
 }

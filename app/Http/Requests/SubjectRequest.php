@@ -29,8 +29,8 @@ class SubjectRequest extends FormRequest
             'name' => [
                 'required',
                 'string',
-                Rule::unique('subjects', 'name')
-                ->ignore($this->route()->subject)
+                // Rule::unique('subjects', 'name')
+                // ->ignore($this->route()->subject)
             ],
             "status" => ["required", 'boolean'],
             "student_class_id" => ['required', 'integer'],

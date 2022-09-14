@@ -9,7 +9,6 @@ use App\Http\Resources\ChapterResource;
 use App\Models\Chapter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Cache as FacadesCache;
 use Illuminate\Support\Facades\DB;
 
 class ChapterController extends Controller
@@ -93,7 +92,7 @@ class ChapterController extends Controller
         try {
             DB::beginTransaction();
             $chapter->update($request->safe()->all());
-            FacadesCache::forget('subject');
+            Cache::forget('chapters');
             DB::commit();
             return response()->noContent();
         } catch (\Throwable $th) {
@@ -114,7 +113,7 @@ class ChapterController extends Controller
         try {
             DB::beginTransaction();
             $chapter->delete();
-            Cache::forget('subject');
+            Cache::forget('chapters');
             DB::commit();
             return response()->noContent();
         } catch (\Throwable $th) {
