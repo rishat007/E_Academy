@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\ChapterWiseMcqQuestionController;
 use App\Http\Controllers\Common\ChapterController;
 use App\Http\Controllers\Common\ClassWiseSubjectController;
 use App\Http\Controllers\Common\StudentClassController;
 use App\Http\Controllers\Common\SubjectController;
+use App\Http\Controllers\McqQuestionController;
 use App\Http\Controllers\PermissionListController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SubjectWiseChapterController;
@@ -26,8 +28,10 @@ Route::group(["middleware" => ["auth:sanctum"]], function(){
     Route::apiResource("student_classes", StudentClassController::class);
     Route::apiResource("subject", SubjectController::class);
     Route::apiResource("chapter", ChapterController::class);
+    Route::apiResource("mcq_question", McqQuestionController::class);
     Route::get("class_wise_subject/{studentClass}", ClassWiseSubjectController::class);
     Route::get("subject_wise_chapter/{subject}", SubjectWiseChapterController::class);
+    Route::get("chapter_wise_mcq_question/{chapter}", ChapterWiseMcqQuestionController::class);
 
 });
 

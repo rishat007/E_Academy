@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Wildside\Userstamps\Userstamps;
 
-class Chapter extends Model
+class McqQuestion extends Model
 {
     use HasFactory;
     use HasFactory;
@@ -21,9 +21,9 @@ class Chapter extends Model
     use BindsOnUuid;
     use SoftDeletes;
 
-    protected $table = "chapters";
+    protected $table = "mcq_questions";
     protected $fillable =[
-      'subjects_id','name','status',
+      'chapters_id','question','answer','set',
     ];
     protected $casts = [
         'uuid' => EfficientUuid::class,
@@ -34,18 +34,19 @@ class Chapter extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function subject(): BelongsTo
+    public function chapter(): BelongsTo
     {
-        return $this->belongsTo(Subject::class);
+        return $this->belongsTo(Chapter::class,"chapters_id");
     }
+
     /**
-     * Get all of the chapter for the Chapter
+     * Get all of the options for the McqQuestion
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function mcq_questions(): HasMany
+    public function options(): HasMany
     {
-        return $this->hasMany(McqQuestion::class,"chapters_id","id");
+        return $this->hasMany(McqOption::class);
     }
 
 }
