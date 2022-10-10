@@ -95,6 +95,7 @@ class McqQuestionController extends Controller
      */
     public function destroy(McqQuestion $mcq_question)
     {
+        $this->authorize('Delete Mcq_Question');
         try {
             DB::beginTransaction();
             $mcq_question->options()->delete();

@@ -86,6 +86,26 @@ class PermissionSeeder extends Seeder
         $adminRole->givePermissionTo($permissionList);
         $teacherRole->givePermissionTo($permissionList);
 
+        $mcq_questio = Module::firstOrCreate([
+            'name'=> 'McqQuestion',
+            'status' => 1
+        ]);
+        Permission::firstOrCreate(["name"=>"Access Mcq_Question","module_id"=>$mcq_questio->id]);
+        Permission::firstOrCreate(["name"=>"Access Chapter Wise McqQuestion","module_id"=>$mcq_questio->id]);
+        Permission::firstOrCreate(["name"=>"Create mcq_Questions","module_id"=>$mcq_questio->id]);
+        Permission::firstOrCreate(["name"=>"Update Mcq_Question","module_id"=>$mcq_questio->id]);
+        Permission::firstOrCreate(["name"=>"Delete Mcq_Question","module_id"=>$mcq_questio->id]);
+
+        $permissionList= [
+            "Access Mcq_Question",
+            "Access Chapter Wise McqQuestion",
+            "Create mcq_Questions",
+            "Update Mcq_Question",
+            "Delete Mcq_Question",
+        ];
+        $adminRole->givePermissionTo($permissionList);
+        $teacherRole->givePermissionTo($permissionList);
+
         Artisan::call("cache:clear");
     }
 }
