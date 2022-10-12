@@ -9,45 +9,44 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Wildside\Userstamps\Userstamps;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Wildside\Userstamps\Userstamps;
 
-class Subject extends Model
+class McqQuestion extends Model
 {
+    use HasFactory;
     use HasFactory;
     use Userstamps;
     use GeneratesUuid;
     use BindsOnUuid;
     use SoftDeletes;
 
-
-    protected $table = "subjects";
-
-    protected $fillable = [
-        "student_class_id",
-        "name",
-        "status",
+    protected $table = "mcq_questions";
+    protected $fillable =[
+      'chapters_id','question','answer','set',
     ];
     protected $casts = [
         'uuid' => EfficientUuid::class,
     ];
 
     /**
-     * Get the StudentClass that owns the Subject
+     * Get tchapter that owns the Chapter
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function studentClass(): BelongsTo
+    public function chapter(): BelongsTo
     {
-        return $this->belongsTo(StudentClass::class);
+        return $this->belongsTo(Chapter::class,"chapters_id");
     }
+
     /**
-     * Get all of the chapters for the Subject
+     * Get all of the options for the McqQuestion
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function chapters(): HasMany
+    public function options(): HasMany
     {
-        return $this->hasMany(Chapter::class, 'subjects_id');
+        return $this->hasMany(McqOption::class);
     }
+
 }

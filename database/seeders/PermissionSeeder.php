@@ -44,14 +44,67 @@ class PermissionSeeder extends Seeder
         ];
         $adminRole->givePermissionTo($permissionList);
 
-        $courseModule = Module::firstOrCreate([
+        $subject = Module::firstOrCreate([
             'name'=> 'Course',
             'status' => 1
         ]);
-        $chapterModule = Module::firstOrCreate([
+
+        Permission::firstOrCreate(["name"=>"Access Subject","module_id"=>$subject->id]);
+        Permission::firstOrCreate(["name"=>"Access Class Wise Subject","module_id"=>$subject->id]);
+        Permission::firstOrCreate(["name"=>"Create Subject","module_id"=>$subject->id]);
+        Permission::firstOrCreate(["name"=>"Update Subject","module_id"=>$subject->id]);
+        Permission::firstOrCreate(["name"=>"Delete Subject","module_id"=>$subject->id]);
+
+        $permissionList= [
+            "Access Subject",
+            "Access Class Wise Subject",
+            "Create Subject",
+            "Update Subject",
+            "Delete Subject",
+        ];
+        $adminRole->givePermissionTo($permissionList);
+        $teacherRole->givePermissionTo($permissionList);
+
+        $chapter = Module::firstOrCreate([
             'name'=> 'Chapter',
             'status' => 1
         ]);
+
+        Permission::firstOrCreate(["name"=>"Access Chapter","module_id"=>$chapter->id]);
+        Permission::firstOrCreate(["name"=>"Access Subject Wise Chapter","module_id"=>$chapter->id]);
+        Permission::firstOrCreate(["name"=>"Create Chapter","module_id"=>$chapter->id]);
+        Permission::firstOrCreate(["name"=>"Update Chapter","module_id"=>$chapter->id]);
+        Permission::firstOrCreate(["name"=>"Delete Chapter","module_id"=>$chapter->id]);
+
+        $permissionList= [
+            "Access Chapter",
+            "Access Subject Wise Chapter",
+            "Create Chapter",
+            "Update Chapter",
+            "Delete Chapter",
+        ];
+        $adminRole->givePermissionTo($permissionList);
+        $teacherRole->givePermissionTo($permissionList);
+
+        $mcq_questio = Module::firstOrCreate([
+            'name'=> 'McqQuestion',
+            'status' => 1
+        ]);
+        Permission::firstOrCreate(["name"=>"Access Mcq_Question","module_id"=>$mcq_questio->id]);
+        Permission::firstOrCreate(["name"=>"Access Chapter Wise McqQuestion","module_id"=>$mcq_questio->id]);
+        Permission::firstOrCreate(["name"=>"Create mcq_Questions","module_id"=>$mcq_questio->id]);
+        Permission::firstOrCreate(["name"=>"Update Mcq_Question","module_id"=>$mcq_questio->id]);
+        Permission::firstOrCreate(["name"=>"Delete Mcq_Question","module_id"=>$mcq_questio->id]);
+
+        $permissionList= [
+            "Access Mcq_Question",
+            "Access Chapter Wise McqQuestion",
+            "Create mcq_Questions",
+            "Update Mcq_Question",
+            "Delete Mcq_Question",
+        ];
+        $adminRole->givePermissionTo($permissionList);
+        $teacherRole->givePermissionTo($permissionList);
 
         Artisan::call("cache:clear");
     }

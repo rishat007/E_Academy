@@ -4,9 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateChaptersTable extends Migration
+class CreateMcqOptionsTable extends Migration
 {
-    public $tableName='chapters';
     /**
      * Run the migrations.
      *
@@ -14,15 +13,12 @@ class CreateChaptersTable extends Migration
      */
     public function up()
     {
-        Schema::create($this->tableName, function (Blueprint $table) {
-            $table->engine = 'InnoDB';
+        Schema::create('mcq_options', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 30);
-            $table->boolean('status')->nullable();
+            $table->foreignId("mcq_question_id");
+            $table->string("option");
             $table->timestamps();
-
         });
-
     }
 
     /**
@@ -32,6 +28,6 @@ class CreateChaptersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists($this->tableName);
+        Schema::dropIfExists('mcq_options');
     }
 }

@@ -10,12 +10,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Propaganistas\LaravelPhone\Casts\RawPhoneNumberCast;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
     use GeneratesUuid;
     use BindsOnUuid;
+    use HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -45,6 +48,8 @@ class User extends Authenticatable
      */
     protected $casts = [
         'phone_no_verified_at' => 'datetime',
+        'phone_no' => RawPhoneNumberCast::class.':BD',
         'uuid' => EfficientUuid::class,
+
     ];
 }

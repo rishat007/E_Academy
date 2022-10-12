@@ -4,8 +4,14 @@ namespace App\Http\Controllers\Common;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StudentClassRequest;
+use App\Http\Requests\StudentClassStoreRequest;
+use App\Http\Requests\StudentClassUpdateRequest;
+use App\Http\Resources\StudentClassResource;
 use App\Models\StudentClass;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use JustSteveKing\StatusCode\Http;
 
 class StudentClassController extends Controller
 {
@@ -16,7 +22,13 @@ class StudentClassController extends Controller
      */
     public function index()
     {
-        //
+        $this->authorize('Access Student Class');
+
+        return Cache::rememberForever('student_classes', function () {
+            $studentclasses = StudentClass::get();
+
+           return StudentClassResource::collection($studentclasses);
+        });
     }
 
     /**
@@ -35,18 +47,25 @@ class StudentClassController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StudentClassRequest $request)
+    public function store(StudentClassStoreRequest $request)
     {
         //
+        try {
+            DB::beginTransaction();
+            $studentClass = new StudentClass();
 
-        $studentClass = new StudentClass();
+            $studentClass->name=$request->name;
+            $studentClass->status=$request->status;
 
-        $studentClass->name=$request->name;
-        $studentClass->status=$request->status;
+            $studentClass->save();
+            Cache::forget('student_classes');
+            DB::commit();
+            return response()->noContent();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
 
-        $studentClass->save();
-
-        return response()->noContent();
     }
 
     /**
@@ -78,9 +97,19 @@ class StudentClassController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StudentClassUpdateRequest $request, StudentClass $studentClass)
     {
         //
+        try {
+            DB::beginTransaction();
+            $studentClass->update($request->safe()->all());
+            Cache::forget('student_classes');
+            DB::commit();
+            return response()->noContent();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
     }
 
     /**
@@ -89,8 +118,18 @@ class StudentClassController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(StudentClass $studentClass)
     {
         //
+        try {
+            DB::beginTransaction();
+            $studentClass->delete();
+            Cache::forget('student_classes');
+            DB::commit();
+            return response()->noContent();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
     }
 }

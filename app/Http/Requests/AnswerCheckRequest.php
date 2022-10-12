@@ -2,9 +2,11 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Chapter;
+use App\Models\McqQuestion;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StudentClassRequest extends FormRequest
+class AnswerCheckRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,8 +15,7 @@ class StudentClassRequest extends FormRequest
      */
     public function authorize()
     {
-
-        return $this->user()->can("Create Student Class");
+        return true;
     }
 
     /**
@@ -25,9 +26,10 @@ class StudentClassRequest extends FormRequest
     public function rules()
     {
         return [
-            //
-            'name'=>'required',
-            "status"=>"required",
+            "given_answer" => ['required'],
         ];
+    }
+    public function prepareForValidation(){
+        //
     }
 }

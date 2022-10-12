@@ -4,9 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateChaptersTable extends Migration
+class CreateQuizExamsTable extends Migration
 {
-    public $tableName='chapters';
     /**
      * Run the migrations.
      *
@@ -14,15 +13,15 @@ class CreateChaptersTable extends Migration
      */
     public function up()
     {
-        Schema::create($this->tableName, function (Blueprint $table) {
-            $table->engine = 'InnoDB';
+        Schema::create('quiz_exams', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 30);
-            $table->boolean('status')->nullable();
+            $table->efficientUuid('uuid')->index();
+            $table->string("name")->nullable()->default("Quiz");
+            $table->foreignId("student_id");
+            $table->foreignId("chapters_id");
             $table->timestamps();
-
+            $table->softDeletes();
         });
-
     }
 
     /**
@@ -32,6 +31,6 @@ class CreateChaptersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists($this->tableName);
+        Schema::dropIfExists('quiz_exams');
     }
 }

@@ -3,7 +3,13 @@
 namespace App\Http\Controllers\Common;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SubjectRequest;
+use App\Http\Requests\SubjectStoreRequest;
+use App\Http\Resources\SubjectResource;
+use App\Models\Subject;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SubjectController extends Controller
 {
@@ -15,6 +21,12 @@ class SubjectController extends Controller
     public function index()
     {
         //
+        // $this->authorize('Access Student Class');
+
+        return Cache::rememberForever('subject', function () {
+            $subject = Subject::with('studentClass')->get();
+           return SubjectResource::collection($subject);
+        });
     }
 
     /**
@@ -33,9 +45,19 @@ class SubjectController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(SubjectStoreRequest $request)
     {
         //
+        try {
+            DB::beginTransaction();
+            Subject::create($request->safe()->all());
+            DB::commit();
+            Cache::forget('subject');
+            return response()->noContent();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
     }
 
     /**
@@ -67,9 +89,18 @@ class SubjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(SubjectRequest $request, Subject $subject)
     {
-        //
+        try {
+            DB::beginTransaction();
+            $subject->update($request->safe()->all());
+            Cache::forget('subject');
+            DB::commit();
+            return response()->noContent();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
     }
 
     /**
@@ -78,8 +109,18 @@ class SubjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Subject $subject)
     {
         //
+        try {
+            DB::beginTransaction();
+            $subject->delete();
+            Cache::forget('subject');
+            DB::commit();
+            return response()->noContent();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
     }
 }
