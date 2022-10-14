@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\StartExamResource;
+use App\Models\Chapter;
+use App\Models\QuizExam;
 use Illuminate\Http\Request;
 
 class StartExamController extends Controller
@@ -14,7 +17,13 @@ class StartExamController extends Controller
      */
     public function __invoke(Request $request)
     {
-        //
-        dd($request);
+        $chapter = Chapter::whereUuid($request->chapters_id)->firstOrFail();
+
+        $startExam = QuizExam::create([
+            'student_id' => auth('sanctum')->id(),
+            'chapters_id' => $chapter->id
+        ]);
+        return new StartExamResource($startExam);
+
     }
 }

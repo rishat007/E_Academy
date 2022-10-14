@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Role;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Artisan;
@@ -18,10 +19,10 @@ class RoleSeeder extends Seeder
     {
         Model::unguard();
 
-        $adminRole = Role::firstOrCreate(["name"=>"Admin", "guard_name"=>"web"]);
-        $teacherRole = Role::firstOrCreate(["name"=>"Teacher", "guard_name"=>"web"]);
-        $studentRole = Role::firstOrCreate(["name"=>"Student", "guard_name"=>"web"]);
-        $freeStudentRole = Role::firstOrCreate(["name"=>"Free Student", "guard_name"=>"web"]);
+        $adminRole = Role::firstOrCreate(["name"=>User::USER_ROLE_ADMIN, "guard_name"=>"web"]);
+        $teacherRole = Role::firstOrCreate(["name"=>User::USER_ROLE_TEACHER, "guard_name"=>"web"]);
+        $studentRole = Role::firstOrCreate(["name"=>User::USER_TYPE_STUDENT, "guard_name"=>"web"]);
+        $freeStudentRole = Role::firstOrCreate(["name"=>User::USER_ROLE_FREE_STUDENT, "guard_name"=>"web"]);
 
 
         Artisan::call("cache:clear");

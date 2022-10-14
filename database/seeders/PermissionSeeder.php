@@ -44,6 +44,24 @@ class PermissionSeeder extends Seeder
         ];
         $adminRole->givePermissionTo($permissionList);
 
+        $teacher = Module::firstOrCreate([
+            "name"=>"Teacher",
+            "status"=>1
+        ]);
+
+        Permission::firstOrCreate(["name"=>"Access Teacher ","module_id"=>$teacher->id]);
+        Permission::firstOrCreate(["name"=>"Create Teacher ","module_id"=>$teacher->id]);
+        Permission::firstOrCreate(["name"=>"Update Teacher ","module_id"=>$teacher->id]);
+        Permission::firstOrCreate(["name"=>"Delete Teacher ","module_id"=>$teacher->id]);
+
+        $permissionList= [
+            "Access Teacher ",
+            "Create Teacher ",
+            "Update Teacher ",
+            "Delete Teacher ",
+        ];
+        $adminRole->givePermissionTo($permissionList);
+
         $subject = Module::firstOrCreate([
             'name'=> 'Course',
             'status' => 1
