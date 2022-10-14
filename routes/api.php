@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AnswerCheckController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\ChapterWiseMcqQuestionController;
 use App\Http\Controllers\Common\ChapterController;
 use App\Http\Controllers\Common\ClassWiseSubjectController;
@@ -11,6 +12,8 @@ use App\Http\Controllers\PermissionListController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StartExamController;
 use App\Http\Controllers\SubjectWiseChapterController;
+use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\TeacherRegisterController;
 use App\Http\Controllers\UserProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +35,8 @@ Route::group(["middleware" => ["auth:sanctum"]], function(){
     Route::apiResource("subject", SubjectController::class);
     Route::apiResource("chapter", ChapterController::class);
     Route::apiResource("mcq_question", McqQuestionController::class);
+    Route::apiResource("teacher", TeacherController::class);
+    Route::post("stuff", [RegisteredUserController::class, 'store']);
     Route::get("class_wise_subject/{studentClass}", ClassWiseSubjectController::class);
     Route::get("subject_wise_chapter/{subject}", SubjectWiseChapterController::class);
     Route::get("chapter_wise_mcq_question/{chapter}", ChapterWiseMcqQuestionController::class);

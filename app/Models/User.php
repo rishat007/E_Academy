@@ -20,6 +20,14 @@ class User extends Authenticatable
     use BindsOnUuid;
     use HasRoles;
 
+    const USER_TYPE_SUPER_ADMIN = 1;
+    const USER_TYPE_TEACHER = 2;
+    const USER_TYPE_STUDENT = 3;
+
+    const USER_ROLE_ADMIN = 'Admin';
+    const USER_ROLE_TEACHER = 'Teacher';
+    const USER_ROLE_STUDENT = 'Student';
+    const USER_ROLE_FREE_STUDENT = "Free Student";
     /**
      * The attributes that are mass assignable.
      *
@@ -50,6 +58,5 @@ class User extends Authenticatable
         'phone_no_verified_at' => 'datetime',
         'phone_no' => RawPhoneNumberCast::class.':BD',
         'uuid' => EfficientUuid::class,
-
     ];
 }
