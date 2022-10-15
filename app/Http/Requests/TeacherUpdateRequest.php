@@ -28,11 +28,13 @@ class TeacherUpdateRequest extends FormRequest
             'name' => [
                 'required',
                 'string',
-                Rule::unique('users', 'name')
-                ->ignore($this->route()->users)
             ],
-            "phone_no" => ["required", 'string'],
-            "user_type" => ['required', 'integer'],
+            'phone_no' => [
+                'required',
+                Rule::unique('users', 'phone_no')
+                ->ignore($this->route()->user)
+            // "user_type" => ['required', 'integer'],
+            ],
         ];
     }
 }

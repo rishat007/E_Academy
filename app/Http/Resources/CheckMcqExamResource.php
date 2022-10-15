@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserProfileResource extends JsonResource
+class CheckMcqExamResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,10 +14,6 @@ class UserProfileResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
-            "name"=>$this->name,
-            "phone_no"=>$this->phone_no,
-            "user_type"=>$this->user_type
-        ];
+        return parent::toArray($request);
     }
 }
