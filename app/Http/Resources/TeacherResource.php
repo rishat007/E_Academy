@@ -18,8 +18,7 @@ class TeacherResource extends JsonResource
             return [
                 'name' => $this->name,
                 'phone_no'=>$this->phone_no,
-                'password'=>$this->password,
-                'user_type'=>$this->user_type
+                'uuid'=>$this->uuid,
             ];
         }
     }

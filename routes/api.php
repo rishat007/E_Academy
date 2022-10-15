@@ -3,6 +3,7 @@
 use App\Http\Controllers\AnswerCheckController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\ChapterWiseMcqQuestionController;
+use App\Http\Controllers\CheckMcqExamController;
 use App\Http\Controllers\Common\ChapterController;
 use App\Http\Controllers\Common\ClassWiseSubjectController;
 use App\Http\Controllers\Common\StudentClassController;
@@ -42,6 +43,7 @@ Route::group(["middleware" => ["auth:sanctum"]], function(){
     Route::get("chapter_wise_mcq_question/{chapter}", ChapterWiseMcqQuestionController::class);
     Route::get("answer_check/{mcq_question}",AnswerCheckController::class);
     Route::post("start_exam",StartExamController::class);
+    Route::get("mcq_exam_check/{exam}",CheckMcqExamController::class);
 
 });
 

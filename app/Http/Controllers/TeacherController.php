@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\TeacherStoreRequest;
 use App\Events\TeacherRegistered;
+use App\Http\Requests\TeacherUpdateRequest;
+use App\Http\Resources\TeacherResource;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -18,7 +21,12 @@ class TeacherController extends Controller
      */
     public function index()
     {
-        //
+        $this->authorize('Access Teacher');
+
+        return Cache::rememberForever('teachers', function () {
+            $teacher = User::where('user_type', User::USER_TYPE_TEACHER)->get();
+           return TeacherResource::collection($teacher);
+        });
     }
 
     /**
@@ -67,9 +75,18 @@ class TeacherController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(TeacherUpdateRequest $request, User $teacher)
     {
-        //
+        try {
+            DB::beginTransaction();
+            $teacher->update($request->safe()->all());
+            Cache::forget('teachers');
+            DB::commit();
+            return response()->noContent();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
     }
 
     /**
@@ -78,8 +95,17 @@ class TeacherController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $teacher)
     {
-        //
+        try {
+            DB::beginTransaction();
+            $teacher->delete();
+            Cache::forget('teachers');
+            DB::commit();
+            return response()->noContent();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
     }
 }
