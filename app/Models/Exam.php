@@ -17,8 +17,9 @@ class Exam extends Model
     Use BindsOnUuid;
 
     const EXAM_TYPE_MCQ_QUIZ=1;
+    const EXAM_TYPE_MCQ_QUIZ_FEE=10;
     const EXAM_TYPE_MODELTEST=2;
-
+    const EXAM_TYPE_MODELTEST_FEE=20;
     protected $fillable =[
         'exam_type_id','student_id','chapters_id'
     ];
