@@ -22,7 +22,7 @@ class StudentClassController extends Controller
      */
     public function index()
     {
-        $this->authorize('Access Student Class');
+        // $this->authorize('Access Student Class');
 
         return Cache::rememberForever('student_classes', function () {
             $studentclasses = StudentClass::get();
