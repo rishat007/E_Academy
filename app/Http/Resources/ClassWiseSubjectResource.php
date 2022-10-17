@@ -16,9 +16,7 @@ class ClassWiseSubjectResource extends JsonResource
     {
         return [
             'class' => $this->name,
-            $this->whenLoaded('subjects', fn()=>$this->merge([
-                'subjects' => $this->subjects->pluck('name','uuid')
-            ]))
+            'subjects' =>$this->subjects->map->only(['name','uuid'])
         ];
     }
 }
