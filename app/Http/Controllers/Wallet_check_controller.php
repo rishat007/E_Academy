@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\WalletStoreRequest;
 use App\Models\Exam;
 use App\Models\Invoice;
+use App\Models\UserCardInfo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -41,24 +42,47 @@ class Wallet_check_controller extends Controller
     {
         try {
             DB::beginTransaction();
-            if(Exam::EXAM_TYPE_MCQ_QUIZ==$request->type){
-                $fee=Exam::EXAM_TYPE_MCQ_QUIZ_FEE;
-            }elseif(Exam::EXAM_TYPE_MODELTEST==$request->type){
-                $fee=Exam::EXAM_TYPE_MODELTEST_FEE;
-            }else{
-                return response()->json(['message' =>'This exame type is not available'],404);
+
+            if (Exam::EXAM_TYPE_MCQ_QUIZ == $request->exam_type) {
+                $fee = Exam::EXAM_TYPE_MCQ_QUIZ_FEE;
+            } elseif (Exam::EXAM_TYPE_MODELTEST == $request->exam_type) {
+                $fee = Exam::EXAM_TYPE_MODELTEST_FEE;
+            } else {
+                return response()->json(['message' => 'This exame type is not available'], 404);
             }
 
-            if($fee>Auth::user()->wallet_balance){
-                return response()->json(['message' =>'Not enough funds available'],404);
+            // $card = UserCardInfo::query()->where('card_number', $request->card_number)->first();
+
+            // valdated for user card_number
+            $card = Auth::user()->my_card->where('card_number', $request->card_number)->first();
+            if (!$card) {
+                return response()->json(['message' => 'This card number is not valid'], 404);
             }
 
-            // Auth::user()->update([
-            //     'wallet_balance' =>(Auth::user()->wallet_balance-$fee),
-            // ]);
+            if ($card->pin_no != $request->pin_no) {
+                return response()->json(['message' => 'Pin number does not match'], 404);
+            }
+
+            if ($card->balance < $fee) {
+                return response()->json(['message' => 'Sorry! insufficient balance'], 404);
+            }
+
+            $balance=$card->balance;
+
+            $card->update([
+                'balance' => ($balance-$fee), // new balance added to the card wallet;
+            ]);
 
 
-            Invoice::create([]);
+            Invoice::create([
+                'exam_type'=>$request->exam_type,
+                'exam_fee'=>$fee,
+                'paid'=>$fee,
+                'discount'=>$request->discount??0,
+                'chapter_id'=>$request->chapter,
+                'previous_balance'=>$balance,
+            ]);
+
             DB::commit();
             return response()->noContent();
         } catch (\Throwable $th) {

@@ -15,7 +15,7 @@ class CreateCardInformationTable extends Migration
     {
         Schema::create('card_information', function (Blueprint $table) {
             $table->id();
-            $table->number('card_number')->unique();
+            $table->string('card_number',12)->unique();
             $table->enum('card_type',['Visa', 'Mastercard']);
             $table->tinyInteger('is_sale')->default(0);
             $table->timestamps();

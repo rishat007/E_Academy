@@ -60,4 +60,8 @@ class User extends Authenticatable
         'phone_no' => RawPhoneNumberCast::class.':BD',
         'uuid' => EfficientUuid::class,
     ];
+
+    public function my_card(){
+        return $this->hasMany(UserCardInfo::class);
+    }
 }

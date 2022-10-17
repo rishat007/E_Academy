@@ -26,9 +26,18 @@ class WalletStoreRequest extends FormRequest
         return [
             'exam_type'=> ['required', 'integer'],
             'exam_fee'=> ['required', 'integer'],
-            'paid'=> ['required', 'double'],
-            'discount'=> ['nullable', 'double'],
+            'card_number'=> ['required', 'integer'],
+            'paid'=> ['required'],
+            'discount'=> ['nullable'],
 
         ];
     }
+    public function messages()
+    {
+        return  [
+            'card_number.required'=>'Please enter card number',
+            'card_number.integer'=>'card number must be a number',
+        ];
+    }
+
 }
