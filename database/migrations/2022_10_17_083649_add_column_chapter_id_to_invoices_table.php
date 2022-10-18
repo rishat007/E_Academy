@@ -18,6 +18,7 @@ class AddColumnChapterIdToInvoicesTable extends Migration
             $table->foreignId('subject_id')->nullable();
             $table->foreignId('class_id')->nullable();
             $table->double('previous_balance')->default(0);
+            $table->string('card_number',12)->nullable();
         });
     }
 
