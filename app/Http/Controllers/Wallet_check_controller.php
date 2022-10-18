@@ -74,16 +74,20 @@ class Wallet_check_controller extends Controller
             ]);
 
 
-            Invoice::create([
+            $save=Invoice::create([
+                'invoice_number' => rand(1,100),
+                'card_number' => $request->card_number,
                 'exam_type'=>$request->exam_type,
                 'exam_fee'=>$fee,
                 'paid'=>$fee,
                 'discount'=>$request->discount??0,
                 'chapter_id'=>$request->chapter,
                 'previous_balance'=>$balance,
+                'user_id' =>Auth::id()
             ]);
 
             DB::commit();
+            return $save;
             return response()->noContent();
         } catch (\Throwable $th) {
             DB::rollBack();

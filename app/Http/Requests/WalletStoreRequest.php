@@ -25,9 +25,9 @@ class WalletStoreRequest extends FormRequest
     {
         return [
             'exam_type'=> ['required', 'integer'],
-            'exam_fee'=> ['required', 'integer'],
+
             'card_number'=> ['required', 'integer'],
-            'paid'=> ['required'],
+
             'discount'=> ['nullable'],
 
         ];

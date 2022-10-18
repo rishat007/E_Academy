@@ -17,7 +17,8 @@ class SubjectWiseChapterResource extends JsonResource
         return [
             'subject' => $this->name,
             $this->whenLoaded('chapters', fn()=>$this->merge([
-                'chapters' => $this->chapters->pluck('name','uuid')
+                // 'chapters' => $this->chapters->pluck('name','uuid')
+                'chapters' =>$this->chapters->map->only(['name','uuid'])
             ]))
         ];
     }
