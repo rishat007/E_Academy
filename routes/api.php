@@ -15,6 +15,7 @@ use App\Http\Controllers\StartExamController;
 use App\Http\Controllers\SubjectWiseChapterController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\TeacherRegisterController;
+use App\Http\Controllers\UserCardInfoController;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\Wallet_check_controller;
 use Illuminate\Http\Request;
@@ -38,6 +39,7 @@ Route::group(["middleware" => ["auth:sanctum"]], function(){
     Route::apiResource("chapter", ChapterController::class);
     Route::apiResource("mcq_question", McqQuestionController::class);
     Route::apiResource("teacher", TeacherController::class);
+    Route::apiResource("user_card_info", UserCardInfoController::class);
     Route::post("stuff", [RegisteredUserController::class, 'store']);
     Route::get("class_wise_subject/{studentClass}", ClassWiseSubjectController::class);
     Route::get("subject_wise_chapter/{subject}", SubjectWiseChapterController::class);
@@ -45,7 +47,6 @@ Route::group(["middleware" => ["auth:sanctum"]], function(){
     Route::get("answer_check/{mcq_question}",AnswerCheckController::class);
     Route::post("start_exam",StartExamController::class);
     Route::get("mcq_exam_check/{exam}",CheckMcqExamController::class);
-
     Route::post("billing",[Wallet_check_controller::class,'store']);
 
 

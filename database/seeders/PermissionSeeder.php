@@ -124,6 +124,24 @@ class PermissionSeeder extends Seeder
         $adminRole->givePermissionTo($permissionList);
         $teacherRole->givePermissionTo($permissionList);
 
+        $user_card_info = Module::firstOrCreate([
+            'name'=> 'McqQuestion',
+            'status' => 1
+        ]);
+        Permission::firstOrCreate(["name"=>"Access User Card Info","module_id"=>$user_card_info->id]);
+        Permission::firstOrCreate(["name"=>"Create User Card Info","module_id"=>$user_card_info->id]);
+        Permission::firstOrCreate(["name"=>"Update User Card Info","module_id"=>$user_card_info->id]);
+        Permission::firstOrCreate(["name"=>"Delete User Card Info","module_id"=>$user_card_info->id]);
+
+        $permissionList= [
+            "Access User Card Info",
+            "Create User Card Info",
+            "Update User Card Info",
+            "Delete User Card Info",
+        ];
+        $adminRole->givePermissionTo($permissionList);
+
+
         Artisan::call("cache:clear");
     }
 }
