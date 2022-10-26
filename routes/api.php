@@ -44,7 +44,7 @@ Route::group(["middleware" => ["auth:sanctum"]], function(){
     Route::get("chapter_wise_mcq_question/{chapter}", ChapterWiseMcqQuestionController::class);
     Route::get("answer_check/{mcq_question}",AnswerCheckController::class);
     Route::post("start_exam",StartExamController::class);
-    Route::get("mcq_exam_check/{exam}",CheckMcqExamController::class);
+    Route::post("mcq_exam_check/{exam}",CheckMcqExamController::class);
 
     Route::post("billing",[Wallet_check_controller::class,'store']);
 
