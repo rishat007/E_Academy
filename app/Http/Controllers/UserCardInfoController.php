@@ -21,10 +21,9 @@ class UserCardInfoController extends Controller
     {
         $this->authorize('Access User Card Info');
 
-        return Cache::rememberForever('user_card_infos', function () {
+        return
             $user_card_info = UserCardInfo::get();
             return UserCardInfoResource::collection($user_card_info);
-        });
     }
 
     /**
