@@ -40,6 +40,7 @@ class Wallet_check_controller extends Controller
      */
     public function store(WalletStoreRequest $request)
     {
+        $request->dd();
         try {
             DB::beginTransaction();
 
