@@ -4,6 +4,7 @@ use App\Http\Controllers\AnswerCheckController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\ChapterWiseMcqQuestionController;
 use App\Http\Controllers\CheckMcqExamController;
+use App\Http\Controllers\GetExamScoreController;
 use App\Http\Controllers\Common\ChapterController;
 use App\Http\Controllers\Common\ClassWiseSubjectController;
 use App\Http\Controllers\Common\StudentClassController;
@@ -50,7 +51,7 @@ Route::group(["middleware" => ["auth:sanctum"]], function(){
     Route::get("answer_check/{mcq_question}",AnswerCheckController::class);
     Route::post("start_exam",StartExamController::class);
     Route::post("mcq_exam_check/{exam}",CheckMcqExamController::class);
-    Route::get("mcq_exam_check/{exam}",CheckMcqExamController::class);
+    Route::get("get_exam_score/{exam}",GetExamScoreController::class);
     Route::post("billing",[Wallet_check_controller::class,'store']);
 
 

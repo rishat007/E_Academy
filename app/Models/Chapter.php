@@ -36,7 +36,7 @@ class Chapter extends Model
      */
     public function subject(): BelongsTo
     {
-        return $this->belongsTo(Subject::class);
+        return $this->belongsTo(Subject::class, 'subjects_id');
     }
     /**
      * Get all of the chapter for the Chapter

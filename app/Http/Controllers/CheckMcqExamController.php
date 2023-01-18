@@ -37,10 +37,10 @@ class CheckMcqExamController extends Controller
                 "exam_id" =>  $exam->id,
                 'question_id' => $question->id,
                 'correct_answer' => $question->answer,
-                'given_answer' => $request->question_answer[$question->uuid],
-                'score' => $question->answer == $request->question_answer[$question->uuid] ? 1 : 0,
+                'given_answer' => @$request->question_answer[$question->uuid],
+                'score' => $question->answer == @$request->question_answer[$question->uuid] ? 1 : 0,
             ];
-            if($question->answer == $request->question_answer[$question->uuid]){
+            if($question->answer == @$request->question_answer[$question->uuid]){
                 $score++;
             }
         }
