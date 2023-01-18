@@ -27,8 +27,10 @@ class StudentClassUpdateRequest extends FormRequest
                 'required',
                 'string',
                 Rule::unique('student_classes', 'name')
-                ->ignore($this->route()->student_classes)
+                ->ignore($this->route('student_class')->id)
             ],
+            "status"=>["required", 'boolean']
         ];
     }
+
 }

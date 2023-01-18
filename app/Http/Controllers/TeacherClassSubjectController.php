@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\TeacherStoreRequest;
-use App\Events\TeacherRegistered;
-use App\Http\Requests\TeacherUpdateRequest;
-use App\Http\Resources\TeacherResource;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\AssignTeacherRequest;
+use App\Http\Resources\TeacherClassSubjectResource;
+use App\Models\TeacherClassSubject;
+use App\Events\TeachAssign;
+use App\Events\DeleteTeachAssign;
+use App\Events\UpdateTeachAssign;
+use DB;
 
-class TeacherController extends Controller
+class TeacherClassSubjectController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -26,35 +25,23 @@ class TeacherController extends Controller
         ]);
         $request->validate([
             'length' => ['required', 'integer', 'max:100'],
-            'filter' => ['nullable', 'string'],
         ]);
-        $this->authorize('Access Teacher');
+        $this->authorize('Access Teacher Assign');
 
-        $teacher = User::query()
-            ->where('user_type', User::USER_TYPE_TEACHER)
+        $teacher = TeacherClassSubject::query()
+            ->with(['teacher', 'subject', 'class'])
             ->paginate($request->length);
-        return TeacherResource::collection($teacher);
+        return TeacherClassSubjectResource::collection($teacher);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(TeacherStoreRequest $request)
+    public function store(AssignTeacherRequest $request)
     {
         try {
             DB::beginTransaction();
-            $user = User::create([
-                'name' => $request->name,
-                'phone_no' => $request->phone_no,
-                'password' => Hash::make($request->password),
-                'user_type' => User::USER_TYPE_TEACHER
-            ]);
-            $user->assignRole(User::USER_ROLE_TEACHER);
+            
+            $teacherAssign = TeacherClassSubject::create($request->safe()->all());
 
-            event(new TeacherRegistered($user));
+            event(new TeachAssign($teacherAssign));
             
             DB::commit();
             return response()->noContent();
@@ -83,16 +70,21 @@ class TeacherController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(TeacherUpdateRequest $request, User $teacher)
+    public function update(AssignTeacherRequest $request,$id)
     {
+        $teacherClassSubject = TeacherClassSubject::findOrfail($id);
         try {
             DB::beginTransaction();
-            $teacher->update($request->safe()->all());
+            
+            $teacherClassSubject->update($request->safe()->all());
+
+            event(new UpdateTeachAssign($teacherClassSubject));
             
             DB::commit();
             return response()->noContent();
+
         } catch (\Throwable $th) {
-            DB::rollBack();
+            DB::rollback();
             throw $th;
         }
     }
@@ -103,16 +95,22 @@ class TeacherController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $teacher)
+    public function destroy($id)
     {
+        $this->authorize('Access Teacher Assign');
+        $teacherClassSubject = TeacherClassSubject::findOrfail($id);
         try {
             DB::beginTransaction();
-            $teacher->delete();
+            
+            $teacherClassSubject->delete();
+
+            event(new DeleteTeachAssign($teacherClassSubject));
             
             DB::commit();
             return response()->noContent();
+
         } catch (\Throwable $th) {
-            DB::rollBack();
+            DB::rollback();
             throw $th;
         }
     }

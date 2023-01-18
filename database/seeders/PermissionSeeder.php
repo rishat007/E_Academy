@@ -53,12 +53,14 @@ class PermissionSeeder extends Seeder
         Permission::firstOrCreate(["name"=>"Create Teacher ","module_id"=>$teacher->id]);
         Permission::firstOrCreate(["name"=>"Update Teacher ","module_id"=>$teacher->id]);
         Permission::firstOrCreate(["name"=>"Delete Teacher ","module_id"=>$teacher->id]);
+        Permission::firstOrCreate(["name"=>"Assign Teacher","module_id"=>$teacher->id]);
 
         $permissionList= [
             "Access Teacher ",
             "Create Teacher ",
             "Update Teacher ",
             "Delete Teacher ",
+            "Assign Teacher"
         ];
         $adminRole->givePermissionTo($permissionList);
 
@@ -140,7 +142,11 @@ class PermissionSeeder extends Seeder
             "Delete User Card Info",
         ];
         $adminRole->givePermissionTo($permissionList);
-
+        
+        $user_card_info = Module::firstOrCreate([
+            'name'=> 'Teacher Control',
+            'status' => 1
+        ]);
 
         Artisan::call("cache:clear");
     }

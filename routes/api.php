@@ -18,6 +18,7 @@ use App\Http\Controllers\TeacherRegisterController;
 use App\Http\Controllers\UserCardInfoController;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\Wallet_check_controller;
+use App\Http\Controllers\TeacherClassSubjectController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -40,6 +41,8 @@ Route::group(["middleware" => ["auth:sanctum"]], function(){
     Route::apiResource("mcq_question", McqQuestionController::class);
     Route::apiResource("teacher", TeacherController::class);
     Route::apiResource("user_card_info", UserCardInfoController::class);
+    Route::apiResource("teach-assign", TeacherClassSubjectController::class);
+
     Route::post("stuff", [RegisteredUserController::class, 'store']);
     Route::get("class_wise_subject/{studentClass}", ClassWiseSubjectController::class);
     Route::get("subject_wise_chapter/{subject}", SubjectWiseChapterController::class);
@@ -51,8 +54,10 @@ Route::group(["middleware" => ["auth:sanctum"]], function(){
     Route::post("billing",[Wallet_check_controller::class,'store']);
 
 
+    //Route::get('students', StudetController::class);
 });
-
+// Login user profile data route
 Route::middleware(['auth:sanctum'])->get('/user', UserProfileController::class);
+
 
 require __DIR__.'/auth.php';
