@@ -56,7 +56,7 @@ Route::group(["middleware" => ["auth:sanctum"]], function(){
     Route::get('get_subject_wise_exam_performance', SubjectWiseExamPerformanceController::class);
     Route::post("billing",[Wallet_check_controller::class,'store']);
     
-    Route::get('user', UserProfileController::class);
+    Route::get('user', [UserProfileController::class,'index']);
     //Route::get('students', StudetController::class);
 });
 
