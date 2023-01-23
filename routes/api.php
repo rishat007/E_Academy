@@ -55,12 +55,13 @@ Route::group(["middleware" => ["auth:sanctum"]], function(){
     Route::get("get_exam_score/{exam}",GetExamScoreController::class);
     Route::get('get_subject_wise_exam_performance', SubjectWiseExamPerformanceController::class);
     Route::post("billing",[Wallet_check_controller::class,'store']);
-
-
+    
+    Route::get('user', UserProfileController::class);
     //Route::get('students', StudetController::class);
 });
+
 // Login user profile data route
-Route::middleware(['auth:sanctum'])->get('/user', UserProfileController::class);
+// Route::middleware(['auth:sanctum'])->get('/user', UserProfileController::class);
 
 
 require __DIR__.'/auth.php';
