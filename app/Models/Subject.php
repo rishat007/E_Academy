@@ -50,4 +50,16 @@ class Subject extends Model
     {
         return $this->hasMany(Chapter::class, 'subjects_id');
     }
+
+    public function exams()
+    {
+        return $this->hasManyThrough(
+            Exam::class,
+            Chapter::class, 
+            'subjects_id',
+            'chapters_id',
+            'id',
+            'id'
+        );
+    }
 }

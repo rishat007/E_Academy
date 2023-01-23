@@ -16,4 +16,9 @@ class ExamAnswer extends Model
         'given_answer',
         'score',
     ];
+
+    public function scopeCorrect($query)
+    {
+        return $query->where('score', 1);
+    }
 }

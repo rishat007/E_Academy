@@ -10,9 +10,10 @@ class GetExamScoreController extends Controller
 {
     public function __invoke(Request $request, Exam $exam)
     {
+        $this->authorize('');
         $exam->loadCount([
             'examAnswer'=>function($query){
-                return $query->where('score', 1);
+                return $query->correct();
             },
             'examAnswer as participate' 
         ]);

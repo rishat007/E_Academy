@@ -45,9 +45,4 @@ class Exam extends Model
         return $this->belongsTo(Chapter::class, 'chapters_id');
     }
 
-    public function scopeCorrect($query)
-    {
-        return $query->where('score', 1);
-    }
-
 }

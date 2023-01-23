@@ -21,10 +21,10 @@ class ChapterController extends Controller
     public function index()
     {
         //
-        return Cache::rememberForever('chapters', function () {
+        //return Cache::rememberForever('chapters', function () {
             $chapters = Chapter::with('subject')->get();
            return ChapterResource::collection($chapters);
-        });
+        //});
     }
 
     /**

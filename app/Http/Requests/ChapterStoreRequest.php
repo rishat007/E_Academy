@@ -30,4 +30,13 @@ class ChapterStoreRequest extends FormRequest
             "subjects_id"=>['required','integer']
         ];
     }
+
+    function prepareForValidation()
+    {
+        $subject = Subject::whereUuid($this->subject_id)->firstOrFail();
+        $this->merge([
+            'subjects_id' => $subject->id,
+        ]);
+    }
+
 }

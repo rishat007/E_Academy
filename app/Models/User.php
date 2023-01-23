@@ -64,4 +64,11 @@ class User extends Authenticatable
     public function my_card(){
         return $this->hasMany(UserCardInfo::class);
     }
+
+    //User Type Tacher Secio
+    
+    public function assignClass()
+    {
+        return $this->hasMany(TeacherClassSubject::class, 'teacher_id');
+    } 
 }

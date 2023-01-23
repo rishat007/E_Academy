@@ -105,6 +105,11 @@ class TeacherController extends Controller
      */
     public function destroy(User $teacher)
     {
+        if($teacher->assignClass()->count()){
+            return response()->json([
+                'message' => __('The teacher has assigned class')
+            ], 422);
+        }
         try {
             DB::beginTransaction();
             $teacher->delete();
