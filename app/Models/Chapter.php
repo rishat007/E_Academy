@@ -15,7 +15,6 @@ use Wildside\Userstamps\Userstamps;
 class Chapter extends Model
 {
     use HasFactory;
-    use HasFactory;
     use Userstamps;
     use GeneratesUuid;
     use BindsOnUuid;

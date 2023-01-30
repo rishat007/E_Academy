@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use App\Models\Subject;
 
 class ChapterUpdateRequest extends FormRequest
 {
@@ -34,5 +35,13 @@ class ChapterUpdateRequest extends FormRequest
             "status" => ["required", 'boolean'],
             "subjects_id" => ['required', 'integer'],
         ];
+    }
+
+    function prepareForValidation()
+    {
+        $subject = Subject::whereUuid($this->subject_id)->firstOrFail();
+        $this->merge([
+            'subjects_id' => $subject->id,
+        ]);
     }
 }
